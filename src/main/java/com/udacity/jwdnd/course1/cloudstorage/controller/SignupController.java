@@ -15,6 +15,10 @@ public class SignupController {
 
     private final UserService userService;
 
+    public SignupController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping()
     public String signupView() {
         return "signup";

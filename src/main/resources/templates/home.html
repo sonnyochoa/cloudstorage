@@ -11,9 +11,8 @@
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container">
             <div id="logoutDiv">
-                <form action="#" method="POST">
-                    <button type="submit" class="btn btn-secondary float-right">Logout</button>
-                </form>
+<!--                <button type="submit" class="btn btn-secondary float-right">-->
+                <a th:href="@{/logout}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Logout</a>
             </div>
             <div id="contentDiv" style="clear: right;">
                 <nav style="clear: right;">

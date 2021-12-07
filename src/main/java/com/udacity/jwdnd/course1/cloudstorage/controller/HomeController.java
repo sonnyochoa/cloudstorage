@@ -14,27 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/home")
 public class HomeController {
 
-    private final UserService userService;
-//    private final FileService fileService;
-    private final NoteService noteService;
-//    private final CredentialService credentialService;
-    private final EncryptionService encryptionService;
-
-    public HomeController(UserService userService, /*FileService fileService,*/ NoteService noteService, /*CredentialService credentialService,*/ EncryptionService encryptionService) {
-        this.userService = userService;
-//        this.fileService = fileService;
-        this.noteService = noteService;
-//        this.credentialService = credentialService;
-        this.encryptionService = encryptionService;
-    }
-
     @GetMapping
-    public String getHomePage(Model model, Authentication authentication) {
-        User user = userService.getUser(authentication.getName());
-//        model.addAttribute("file", fileService.getFilesFromUser(user.getUserId()));
-        model.addAttribute("notes", noteService.getAllNotes(user.getUserId()));
-//        model.addAttribute("credentials", credentialService.getCredentials(user.getUserId()));
-        model.addAttribute("encryptionService", encryptionService);
+    public String getHomePage() {
         return "home";
     }
 }

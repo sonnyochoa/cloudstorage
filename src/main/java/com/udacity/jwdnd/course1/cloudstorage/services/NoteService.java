@@ -22,15 +22,15 @@ public class NoteService {
         System.out.println("::: ::: ::: :: :: :==> Create NoteService bean.");
     }
 
-    public void addNote(NoteForm noteForm) {
+    public int addNote(NoteForm noteForm) {
         Note newNote = new Note();
         newNote.setNoteTitle(noteForm.getNoteTitle());
         newNote.setNoteDescription(noteForm.getNoteDescription());
         newNote.setUserId(noteForm.getUserId());
-        noteMapper.insert(newNote);
+        return noteMapper.insert(newNote);
     }
 
-    public List<Note> getAllNotes(int userId) {
+    public List<Note> getAllNotes(Integer userId) {
         return noteMapper.getAllNotes(userId);
     }
 }

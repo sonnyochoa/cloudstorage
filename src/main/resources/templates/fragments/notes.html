@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<body>
+
+    <div th:fragment="notes" class="table-responsive">
+        <table class="table table-stripped" id="userTable">
+            <thead>
+            <tr>
+                <th style="width: 20%" scope="col"></th>
+                <th style="width: 20%" scope="col">Title</th>
+                <th style="width: 20%" scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody th:each="notes:${notes}" id="notes-table-body">
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-success"
+                            id="edit-note-button"
+                            th:note-title="${note.getTitle()}"
+                            th:note-description="${note.getDescription()}"
+                            th:note-id="${note.getNoteId()}"
+                            onclick="showEditNoteModal(this.getAttribute('note-id'),
+                                                   this.getAttribute('note-title'),
+                                                   this.getAttribute('note-description'))">
+                        Edit
+                    </button>
+                    <button type="button" class="btn btn-danger" id="delete-note-button"
+                            th:note-id="${note.getNoteId()}"
+                            onclick="showDeleteNoteModal(this.getAttribute('note-id'))">
+                        Delete
+                    </button>
+                </td>
+                <th id="table-note-title" th:text="${note.getTitle()}" scope="row">Example Note Title</th>
+                <td th:text="${note.getDescription}">Example Note Description</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

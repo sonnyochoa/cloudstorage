@@ -11,13 +11,13 @@
                 <th style="width: 20%" scope="col">Description</th>
             </tr>
             </thead>
-            <tbody th:each="notes:${notes}" id="notes-table-body">
+            <tbody th:each="note:${notes}" id="notes-table-body">
             <tr>
                 <td>
                     <button type="button" class="btn btn-success"
                             id="edit-note-button"
-                            th:note-title="${note.getTitle()}"
-                            th:note-description="${note.getDescription()}"
+                            th:note-title="${note.getNoteTitle()}"
+                            th:note-description="${note.getNoteDescription()}"
                             th:note-id="${note.getNoteId()}"
                             onclick="showEditNoteModal(this.getAttribute('note-id'),
                                                    this.getAttribute('note-title'),
@@ -30,8 +30,8 @@
                         Delete
                     </button>
                 </td>
-                <th id="table-note-title" th:text="${note.getTitle()}" scope="row">Example Note Title</th>
-                <td th:text="${note.getDescription}">Example Note Description</td>
+                <th id="table-note-title" th:text="${note.getNoteTitle()}" scope="row">Example Note Title</th>
+                <td th:text="${note.getNoteDescription()}">Example Note Description</td>
             </tr>
             </tbody>
         </table>

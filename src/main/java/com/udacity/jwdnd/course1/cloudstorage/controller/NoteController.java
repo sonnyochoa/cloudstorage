@@ -50,7 +50,7 @@ public class NoteController {
             System.out.println();
         }
 
-        return "home";
+        return "fragments/notes";
     }
 
     @PostMapping

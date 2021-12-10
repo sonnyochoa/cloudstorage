@@ -8,13 +8,11 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/note")
+@RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
     private final UserService userService;
@@ -30,31 +28,20 @@ public class NoteController {
 
     @GetMapping
     public String getNotes(Model model, Authentication authentication) {
+        System.out.println("........................................................................................");
+        System.out.println("..........                             GET NOTE                               ..........");
+        System.out.println("........................................................................................");
         User user = userService.getUser(authentication.getName());
         model.addAttribute("notes", noteService.getAllNotes(user.getUserId()));
-
-        System.out.println("=====================================================================");
-        System.out.println("|            -------------------------------------------            |");
-        System.out.println("|            -------------------------------------------            |");
-        System.out.println("|                                                                   |");
-        for(Note newNote : noteService.getAllNotes(user.getUserId())) {
-            System.out.println("|                 === === === === === === === ===                  |");
-            System.out.println("|                 |     ---    GET   ---        |                  |");
-            System.out.println("|                 === === === === === === === ===                  |");
-            System.out.println("|       ::: :: :: : ===> TITLE: " + newNote.getNoteTitle());
-            System.out.println("|       ::: :: :: : ===> DESCRIPTION: " + newNote.getNoteDescription());
-            System.out.println("|                                                                   |");
-            System.out.println("|            -------------------------------------------            |");
-            System.out.println("|            -------------------------------------------            |");
-            System.out.println("=====================================================================");
-            System.out.println();
-        }
 
         return "fragments/notes";
     }
 
     @PostMapping
     public String createNote(NoteForm noteForm, Authentication authentication, RedirectAttributes redirectAttributes) {
+        System.out.println("........................................................................................");
+        System.out.println("..........                            CREATE NOTE                             ..........");
+        System.out.println("........................................................................................");
         this.ifError = null;
         this.ifSuccess = null;
         this.errorMessage = null;
@@ -77,25 +64,35 @@ public class NoteController {
             redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
         }
 
-        System.out.println("=====================================================================");
-        System.out.println("|            -------------------------------------------            |");
-        System.out.println("|            -------------------------------------------            |");
-        System.out.println("|                                                                   |");
-        System.out.println("|            ::: :: :: : ===> USER ID: " + userId);
-        System.out.println("|            ::: :: :: : ===> rowsAdded: " + rowsAdded);
-        System.out.println("|            ::: :: :: : ===> number of notes: " + noteService.getAllNotes(userId).size());
-        System.out.println();
-        for(Note newNote : noteService.getAllNotes(userId)) {
-            System.out.println("|                 === === === === === === === ===                  |");
-            System.out.println("|                 |     --- NEW NOTE ---        |                  |");
-            System.out.println("|                 === === === === === === === ===                  |");
-            System.out.println("|       ::: :: :: : ===> TITLE: " + newNote.getNoteTitle());
-            System.out.println("|       ::: :: :: : ===> DESCRIPTION: " + newNote.getNoteDescription());
-            System.out.println("|                                                                   |");
-            System.out.println("|            -------------------------------------------            |");
-            System.out.println("|            -------------------------------------------            |");
-            System.out.println("=====================================================================");
-            System.out.println();
+        return "redirect:/home";
+    }
+
+    @PutMapping
+    public String updateNote(@ModelAttribute("none") Note note, Authentication authentication, RedirectAttributes redirectAttributes) {
+        System.out.println("........................................................................................");
+        System.out.println("..........                             EDIT NOTE                              ..........");
+        System.out.println("........................................................................................");
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
+
+        User user = userService.getUser(authentication.getName());
+        Integer userId = user.getUserId();
+
+        note.setUserId(userId);
+        int rowsUpdated = this.noteService.updateNote(note);
+
+        if (rowsUpdated < 0) {
+            this.errorMessage = "There was an error adding your note. Please try again.";
+        }
+
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess", true);
+            redirectAttributes.addFlashAttribute("successMessage", "Note has been added.");
+        } else {
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
         }
 
         return "redirect:/home";

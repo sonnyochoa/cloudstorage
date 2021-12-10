@@ -8,7 +8,7 @@
             <tr>
                 <th style="width: 20%" scope="col"></th>
                 <th style="width: 20%" scope="col">Title</th>
-                <th style="width: 20%" scope="col">Description</th>
+                <th style="width: 60%" scope="col">Description</th>
             </tr>
             </thead>
             <tbody th:each="note:${notes}" id="notes-table-body">
@@ -20,10 +20,42 @@
                             th:note-description="${note.getNoteDescription()}"
                             th:note-id="${note.getNoteId()}"
                             onclick="showEditNoteModal(this.getAttribute('note-id'),
-                                                   this.getAttribute('note-title'),
-                                                   this.getAttribute('note-description'))">
+                                                       this.getAttribute('note-title'),
+                                                       this.getAttribute('note-description'))">
                         Edit
                     </button>
+
+                    <div class="modal fade" id="editNoteModal" tabindex="-1" role="dialog" aria-labelledby="editNoteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editNoteModalLabel">Note</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="#" th:action="@{/notes}" th:method="PUT">
+                                        <input type="hidden" name="noteId" id="note-id">
+                                        <div class="form-group">
+                                            <label for="note-title" class="col-form-label">Title</label>
+                                            <input type="text" name= "noteTitle" class="form-control" id="note-title" maxlength="20" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="note-description" class="col-form-label">Description</label>
+                                            <textarea class="form-control" name="noteDescription" id="note-description" rows="5" maxlength="1000" required></textarea>
+                                        </div>
+                                        <button id="noteUpdate" type="submit" class="d-none"></button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="$('#noteUpdate').click();">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="button" class="btn btn-danger" id="delete-note-button"
                             th:note-id="${note.getNoteId()}"
                             onclick="showDeleteNoteModal(this.getAttribute('note-id'))">
@@ -37,5 +69,14 @@
         </table>
     </div>
 
+    <script type="text/javascript">
+
+        function showEditNoteModal(noteId, noteTitle, noteDescription) {
+            $('#note-id').val(noteId ? noteId : '');
+            $('#note-title').val(noteTitle ? noteTitle : '');
+            $('#note-description').val(noteDescription ? noteDescription : '');
+            $('#editNoteModal').modal('show');
+        }
+    </script>
 </body>
 </html>

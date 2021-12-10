@@ -98,7 +98,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" th:action="@{/note}" method="POST">
+                                        <form action="#" th:action="@{/notes}" method="POST">
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
@@ -119,6 +119,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
                         <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
                             + Add a New Credential
@@ -191,7 +192,6 @@
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
 
-        <!--For opening the note modal-->
         <script type="text/javascript">
             // For opening the note modal
             function showNoteModal(noteId, noteTitle, noteDescription) {
@@ -201,7 +201,7 @@
                 $('#noteModal').modal('show');
             }
             function getAllNotes() {
-                let url = '/note';
+                let url = '/notes';
                 $("#note-results").load(url);
             }
 

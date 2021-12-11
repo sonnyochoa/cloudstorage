@@ -68,7 +68,7 @@ public class NoteController {
     }
 
     @PutMapping
-    public String updateNote(@ModelAttribute("none") Note note, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String updateNote(@ModelAttribute("note") Note note, Authentication authentication, RedirectAttributes redirectAttributes) {
         System.out.println("........................................................................................");
         System.out.println("..........                             EDIT NOTE                              ..........");
         System.out.println("........................................................................................");
@@ -81,6 +81,7 @@ public class NoteController {
         Integer userId = user.getUserId();
 
         note.setUserId(userId);
+
         int rowsUpdated = this.noteService.updateNote(note);
 
         if (rowsUpdated < 0) {
@@ -95,6 +96,37 @@ public class NoteController {
             redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
         }
 
+        return "redirect:/home";
+    }
+
+    @DeleteMapping
+    public String deleteNote(@ModelAttribute("note") Note note, Authentication authentication, RedirectAttributes redirectAttributes) {
+        System.out.println("........................................................................................");
+        System.out.println("..........                            DELETE NOTE                             ..........");
+        System.out.println("........................................................................................");
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
+
+        User user = userService.getUser(authentication.getName());
+        Integer userId = user.getUserId();
+
+        note.setUserId(userId);
+
+        int rowsDeleted = this.noteService.deleteNote(note);
+
+        if (rowsDeleted < 0) {
+            this.errorMessage = "There was an error deleting your note. Please try again.";
+        }
+
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess", true);
+            redirectAttributes.addFlashAttribute("successMessage", "Note has been deleted.");
+        } else {
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
+        }
         return "redirect:/home";
     }
 }

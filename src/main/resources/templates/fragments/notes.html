@@ -14,6 +14,7 @@
             <tbody th:each="note:${notes}" id="notes-table-body">
             <tr>
                 <td>
+                    <!--  EDIT NOTE BUTTON  -->
                     <button type="button" class="btn btn-success"
                             id="edit-note-button"
                             th:note-title="${note.getNoteTitle()}"
@@ -29,7 +30,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="editNoteModalLabel">Note</h5>
+                                    <h5 class="modal-title" id="editNoteModalLabel">Edit Note</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -56,11 +57,36 @@
                         </div>
                     </div>
 
+                    <!--  DELETE NOTE BUTTON  -->
                     <button type="button" class="btn btn-danger" id="delete-note-button"
                             th:note-id="${note.getNoteId()}"
                             onclick="showDeleteNoteModal(this.getAttribute('note-id'))">
                         Delete
                     </button>
+
+                    <div class="modal fade" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteNoteModalLabel">Delete Note</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="#" th:action="@{/notes}" th:method="DELETE">
+                                        Do you want to delete this note?
+                                        <input type="hidden" name="noteId" id="delete-note-id">
+                                        <button id="deleteNote" type="submit" class="d-none">Delete</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="$('#deleteNote').click();">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <th id="table-note-title" th:text="${note.getNoteTitle()}" scope="row">Example Note Title</th>
                 <td th:text="${note.getNoteDescription()}">Example Note Description</td>
@@ -76,6 +102,11 @@
             $('#note-title').val(noteTitle ? noteTitle : '');
             $('#note-description').val(noteDescription ? noteDescription : '');
             $('#editNoteModal').modal('show');
+        }
+
+        function showDeleteNoteModal(noteId) {
+            $('#delete-note-id').val(noteId ? noteId : '');
+            $('#deleteNoteModal').modal('show');
         }
     </script>
 </body>

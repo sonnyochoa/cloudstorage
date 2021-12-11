@@ -1,15 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
 public class Credential {
-    /*
-        credentialid INT PRIMARY KEY auto_increment,
-        url VARCHAR(100),
-        username VARCHAR (30),
-        key VARCHAR,
-        password VARCHAR,
-        userid INT,
-        foreign key (userid) references USERS(userid)
-     */
 
     private Integer credentialId;
     private String url;
@@ -18,14 +9,14 @@ public class Credential {
     private String password;
     private Integer userId;
 
-    public Credential(Integer credentialId, String url, String username, String key, String password, Integer userId) {
-        this.credentialId = credentialId;
-        this.url = url;
-        this.username = username;
-        this.key = key;
-        this.password = password;
-        this.userId = userId;
-    }
+//    public Credential(Integer credentialId, String url, String username, String key, String password, Integer userId) {
+//        this.credentialId = credentialId;
+//        this.url = url;
+//        this.username = username;
+//        this.key = key;
+//        this.password = password;
+//        this.userId = userId;
+//    }
 
     public void setCredentialId(Integer credentialId) {
         this.credentialId = credentialId;

@@ -8,11 +8,11 @@
 
         <title>Home</title>
     </head>
-    <body class="p-3 mb-2 bg-light text-black">
+    <body class="p-3 mb-2 bg-light text-black" th:onload="getAllFiles()">
         <div class="container">
             <div id="logoutDiv">
 <!--                <button type="submit" class="btn btn-secondary float-right">-->
-                <a th:href="@{/logout}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Logout</a>
+                <a th:href="@{/logout}" class="btn btn-secondary btn-lg active float-right" role="button" aria-pressed="true">Logout</a>
             </div>
             <div id="contentDiv" style="clear: right;">
                 <nav style="clear: right;">
@@ -22,9 +22,10 @@
                         <a class="nav-item nav-link" id="nav-credentials-tab" data-toggle="tab" href="#nav-credentials" role="tab" aria-controls="nav-credentials" aria-selected="false" th:onclick="getAllCredentials()">Credentials</a>
                     </div>
                 </nav>
-                <div class="tab-content" id="nav-tabContent">
+                <div class="tab-content" id="nav-tabContent" th:onload="getAllFiles()">
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                        <form action="#" enctype="multipart/form-data" method="POST">
+
+                        <form action="#" th:action="@{/files}" enctype="multipart/form-data" method="POST">
                             <div class="container">
                                 <div class="row" style="margin: 1em;">
                                     <div class="col-sm-2">
@@ -39,25 +40,9 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="table-responsive">
-                            <table class="table table-striped" id="fileTable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20%" scope="col"></th>
-                                        <th style="width: 80%" scope="col">File Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <a target="_blank" class="btn btn-success">View</a>
-                                        <a  class="btn btn-danger">Delete</a>
-                                    </td>
-                                    <th scope="row">ExampleFile.txt</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+
+                        <div id="file-results"></div>
+
                     </div>
 
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
@@ -150,6 +135,18 @@
         <script th:src="@{/js/bootstrap.min.js}"></script>
 
         <script type="text/javascript">
+            // File Uploads
+            function showFileModal(fileId, fileName) {
+                $('#file-id').val(fileId ? fileId : '');
+                $('#file-title').val(fileName ? fileName : '');
+                $('#fileModal').modal('show');
+            }
+
+            function getAllFiles() {
+                let url = '/files';
+                $("#file-results").load(url);
+            }
+
             // For opening the note modal
             function showNoteModal(noteId, noteTitle, noteDescription) {
                 $('#note-id').val(noteId ? noteId : '');

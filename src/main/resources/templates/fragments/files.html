@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<body>
+  <div th:fragment="files" class="table-responsive">
+    <table class="table table-striped" id="fileTable">
+      <thead>
+      <tr>
+        <th style="width: 20%" scope="col"></th>
+        <th style="width: 80%" scope="col">File Name</th>
+      </tr>
+      </thead>
+      <tbody th:each="file:${files}" id="files-table-body">
+      <tr>
+        <td>
+          <a target="_blank" class="btn btn-success">View</a>
+          <a  class="btn btn-danger">Delete</a>
+        </td>
+        <th scope="row">ExampleFile.txt</th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

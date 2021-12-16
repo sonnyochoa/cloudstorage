@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.mapper;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -9,7 +8,10 @@ import java.util.List;
 @Mapper
 public interface CredentialMapper {
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userId}")
-    List<Credential> getAllCredentials(Integer userId);
+    List<Credential> getAll(Integer userId);
+
+    @Select("SELECT * FROM CREDENTIALS WHERE credentialId = #{credentialId}")
+    Credential get(Integer userId);
 
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid) " +
             "VALUES(#{url}, #{username}, #{key}, #{password}, #{userId})")

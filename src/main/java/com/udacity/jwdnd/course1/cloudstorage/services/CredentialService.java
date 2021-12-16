@@ -2,7 +2,6 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,17 +21,16 @@ public class CredentialService {
         System.out.println("::: ::: ::: :: :: :==> Create CredentialService bean.");
     }
 
-    public int addCredential(CredentialForm credentialForm) {
-        Credential newCredential = new Credential();
-        newCredential.setUrl(credentialForm.getUrl());
-        newCredential.setUsername(credentialForm.getUsername());
-        newCredential.setPassword(credentialForm.getPassword());
-        newCredential.setUserId(credentialForm.getUserId());
-        return credentialMapper.insert(newCredential);
+    public int addCredential(Credential credential) {
+        return credentialMapper.insert(credential);
+    }
+
+    public Credential getCredential(Integer credentialId) {
+        return credentialMapper.get(credentialId);
     }
 
     public List<Credential> getAllCredentials(Integer userId) {
-        return credentialMapper.getAllCredentials(userId);
+        return credentialMapper.getAll(userId);
     }
 
     public int updateCredential(Credential credential) {

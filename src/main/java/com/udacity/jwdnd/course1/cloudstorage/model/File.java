@@ -11,19 +11,19 @@ public class File {
         foreign key (userid) references USERS(userid)
      */
 
-    private Integer fieldId;
+    private Integer fileId;
     private String fileName;
     private String contentType;
     private String fileSize;
     private Integer userId;
     private byte[] fileData;
 
-    public void setFieldId(Integer fieldId) {
-        this.fieldId = fieldId;
+    public void setFileId(Integer fileId) {
+        this.fileId = fileId;
     }
 
-    public Integer getFieldId() {
-        return fieldId;
+    public Integer getFileId() {
+        return fileId;
     }
 
     public void setFileName(String fileName) {

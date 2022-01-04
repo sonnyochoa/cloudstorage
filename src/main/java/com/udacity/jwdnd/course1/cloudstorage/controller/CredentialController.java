@@ -107,7 +107,7 @@ public class CredentialController {
     }
 
     @DeleteMapping
-    public String deleteCredential(@ModelAttribute("credential")Credential credential, Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String deleteCredential(@ModelAttribute("credential")Credential credential, RedirectAttributes redirectAttributes) {
         int rowsDeleted = this.credentialService.deleteCredential(credential);
 
         return "redirect:/home";

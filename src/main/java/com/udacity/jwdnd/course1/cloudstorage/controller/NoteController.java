@@ -28,9 +28,6 @@ public class NoteController {
 
     @GetMapping
     public String getNotes(Model model, Authentication authentication) {
-        System.out.println("........................................................................................");
-        System.out.println("..........                             GET NOTE                               ..........");
-        System.out.println("........................................................................................");
         User user = userService.getUser(authentication.getName());
         model.addAttribute("notes", noteService.getAllNotes(user.getUserId()));
 
@@ -39,9 +36,6 @@ public class NoteController {
 
     @PostMapping
     public String createNote(NoteForm noteForm, Authentication authentication, RedirectAttributes redirectAttributes) {
-        System.out.println("........................................................................................");
-        System.out.println("..........                            CREATE NOTE                             ..........");
-        System.out.println("........................................................................................");
         this.ifError = null;
         this.ifSuccess = null;
         this.errorMessage = null;
@@ -69,9 +63,6 @@ public class NoteController {
 
     @PutMapping
     public String updateNote(@ModelAttribute("note") Note note, Authentication authentication, RedirectAttributes redirectAttributes) {
-        System.out.println("........................................................................................");
-        System.out.println("..........                             EDIT NOTE                              ..........");
-        System.out.println("........................................................................................");
         this.ifError = null;
         this.ifSuccess = null;
         this.errorMessage = null;
@@ -85,12 +76,12 @@ public class NoteController {
         int rowsUpdated = this.noteService.updateNote(note);
 
         if (rowsUpdated < 0) {
-            this.errorMessage = "There was an error adding your note. Please try again.";
+            this.errorMessage = "There was an error updating your note. Please try again.";
         }
 
         if (this.ifError == null) {
             redirectAttributes.addFlashAttribute("ifSuccess", true);
-            redirectAttributes.addFlashAttribute("successMessage", "Note has been added.");
+            redirectAttributes.addFlashAttribute("successMessage", "Note has been updated.");
         } else {
             redirectAttributes.addFlashAttribute("ifError", true);
             redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
@@ -101,9 +92,6 @@ public class NoteController {
 
     @DeleteMapping
     public String deleteNote(@ModelAttribute("note") Note note, Authentication authentication, RedirectAttributes redirectAttributes) {
-        System.out.println("........................................................................................");
-        System.out.println("..........                            DELETE NOTE                             ..........");
-        System.out.println("........................................................................................");
         this.ifError = null;
         this.ifSuccess = null;
         this.errorMessage = null;

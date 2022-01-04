@@ -23,6 +23,10 @@ import java.io.InputStream;
 public class FileController {
     private final UserService userService;
     private final FileService fileService;
+    private String ifError;
+    private String ifSuccess;
+    private String errorMessage;
+    private String successMessage;
 
     public FileController(UserService userService, FileService fileService) {
         this.userService = userService;
@@ -39,9 +43,14 @@ public class FileController {
     @PostMapping
     public String addFile(@RequestParam("fileUpload") MultipartFile fileUpload, Model model, Authentication authentication, RedirectAttributes redirectAttributes) throws IOException {
 
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
+
         if(fileUpload.isEmpty()) {
-            model.addAttribute("success", false);
-            model.addAttribute("message", "Please select a file to upload.");
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", "Please select a file to upload.");
             return "redirect:/home";
         }
 
@@ -58,9 +67,21 @@ public class FileController {
         file.setUserId(userId);
         file.setFileData(fileUpload.getBytes());
 
-        fileService.addFile(file);
-        model.addAttribute("success", true);
-        model.addAttribute("message", "File has been uploaded.");
+        int rowsAdded = fileService.addFile(file);
+//        model.addAttribute("ifSuccess", true);
+//        model.addAttribute("successMessage", "File has been uploaded.");
+
+        if (rowsAdded < 0) {
+            this.errorMessage = "There was an error adding your file. Please try again.";
+        }
+
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess", true);
+            redirectAttributes.addFlashAttribute("successMessage", "File has been added.");
+        } else {
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
+        }
 
         return "redirect:/home";
     }

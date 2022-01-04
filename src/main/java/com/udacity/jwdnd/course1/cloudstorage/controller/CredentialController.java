@@ -22,6 +22,10 @@ public class CredentialController {
     private final CredentialService credentialService;
     private final UserService userService;
     private final EncryptionService encryptionService;
+    private String ifError;
+    private String ifSuccess;
+    private String errorMessage;
+    private String successMessage;
 
     public CredentialController(CredentialService credentialService, UserService userService, EncryptionService encryptionService) {
         this.credentialService = credentialService;
@@ -31,9 +35,6 @@ public class CredentialController {
 
     @GetMapping
     public String getCredentials(Model model, Authentication authentication) {
-        System.out.println("........................................................................................");
-        System.out.println("..........                            GET CREDS                               ..........");
-        System.out.println("........................................................................................");
 
         User user = userService.getUser(authentication.getName());
         model.addAttribute("credentials", credentialService.getAllCredentials(user.getUserId()));
@@ -44,13 +45,12 @@ public class CredentialController {
 
     @PostMapping
     public String createCredential(CredentialForm credentialForm, Authentication authentication, RedirectAttributes redirectAttributes) {
-        System.out.println("........................................................................................");
-        System.out.println("..........                            CREATE CRED                             ..........");
-        System.out.println("........................................................................................");
-//        this.ifError = null;
-//        this.ifSuccess = null;
-//        this.errorMessage = null;
-//        this.successMessage = null;
+
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
+
         Credential credential = new Credential();
 
         // User ID
@@ -73,11 +73,28 @@ public class CredentialController {
 
         int rowsAdded = credentialService.addCredential(credential);
 
+        if (rowsAdded < 0) {
+            this.errorMessage = "There was an error adding your credentials. Please try again.";
+        }
+
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess", true);
+            redirectAttributes.addFlashAttribute("successMessage", "Credentials have been added.");
+        } else {
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
+        }
+
         return "redirect:/home";
     }
 
     @PutMapping
     public String updateCredential(@ModelAttribute("credential")Credential credential, Authentication authentication, RedirectAttributes redirectAttributes) {
+        this.ifError = null;
+        this.ifSuccess = null;
+        this.errorMessage = null;
+        this.successMessage = null;
+
         // User ID
         User user = userService.getUser(authentication.getName());
         Integer userId = user.getUserId();
@@ -93,15 +110,18 @@ public class CredentialController {
         credential.setUserId(userId);
         credential.setPassword(encryptedPassword);
 
-        System.out.println("........................................................................................");
-        System.out.println("..........        Credential ID: " + credential.getCredentialId());
-        System.out.println("..........        Credential URL: " + credential.getUrl());
-        System.out.println("..........        Credential Username: " + credential.getUsername());
-        System.out.println("..........        Credential Key: " + credential.getKey());
-        System.out.println("..........        Credential Password: " + credential.getPassword());
-        System.out.println("........................................................................................");
-
         int rowsUpdated = credentialService.updateCredential(credential);
+        if (rowsUpdated < 0) {
+            this.errorMessage = "There was an error updating your credentials. Please try again.";
+        }
+
+        if (this.ifError == null) {
+            redirectAttributes.addFlashAttribute("ifSuccess", true);
+            redirectAttributes.addFlashAttribute("successMessage", "Credentials have been updated.");
+        } else {
+            redirectAttributes.addFlashAttribute("ifError", true);
+            redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
+        }
 
         return "redirect:/home";
     }

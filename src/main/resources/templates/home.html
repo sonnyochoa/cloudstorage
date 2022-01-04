@@ -10,8 +10,19 @@
     </head>
     <body class="p-3 mb-2 bg-light text-black" th:onload="getAllFiles()">
         <div class="container">
+            <div id="success-msg" th:if="${ifSuccess}" class="alert alert-success alert-dismissible fade show col-md-4" role="alert">
+                <span id="success-msg-text" class="col-md-3" th:text="${successMessage}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="error-msg" th:if="${ifError}" class="alert alert-danger alert-dismissible fade show col-md-4" role="alert">
+                <span id="error-msg-text" class="col-md-3" th:text="${errorMessage}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div id="logoutDiv">
-<!--                <button type="submit" class="btn btn-secondary float-right">-->
                 <a th:href="@{/logout}" class="btn btn-secondary btn-lg active float-right" role="button" aria-pressed="true">Logout</a>
             </div>
             <div id="contentDiv" style="clear: right;">

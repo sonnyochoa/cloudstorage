@@ -11,13 +11,13 @@
     <body class="p-3 mb-2 bg-light text-black" th:onload="getAllFiles()">
         <div class="container">
             <div id="success-msg" th:if="${ifSuccess}" class="alert alert-success alert-dismissible fade show col-md-4" role="alert">
-                <span id="success-msg-text" class="col-md-3" th:text="${successMessage}"></span>
+                <span id="success-msg-text" th:text="${successMessage}"></span>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div id="error-msg" th:if="${ifError}" class="alert alert-danger alert-dismissible fade show col-md-4" role="alert">
-                <span id="error-msg-text" class="col-md-3" th:text="${errorMessage}"></span>
+                <span id="error-msg-text" th:text="${errorMessage}"></span>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

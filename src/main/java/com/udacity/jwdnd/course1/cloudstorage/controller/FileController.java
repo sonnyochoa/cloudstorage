@@ -54,35 +54,48 @@ public class FileController {
             return "redirect:/home";
         }
 
-        File file = new File();
+        try {
 
-        // User ID
-        User user = userService.getUser(authentication.getName());
-        Integer userId = user.getUserId();
+            File file = new File();
 
-        // Set FILE values
-        file.setFileName(fileUpload.getOriginalFilename());
-        file.setContentType(fileUpload.getContentType());
-        file.setFileSize(String.valueOf(fileUpload.getSize()));
-        file.setUserId(userId);
-        file.setFileData(fileUpload.getBytes());
+            // User ID
+            User user = userService.getUser(authentication.getName());
+            Integer userId = user.getUserId();
 
-        int rowsAdded = fileService.addFile(file);
-//        model.addAttribute("ifSuccess", true);
-//        model.addAttribute("successMessage", "File has been uploaded.");
+            // Check if filename already exists
+            File fileNameCheck = fileService.getFileName(fileUpload.getOriginalFilename());
+            if (fileNameCheck != null) {
+                redirectAttributes.addFlashAttribute("ifError", true);
+                redirectAttributes.addFlashAttribute("errorMessage", "File already exists. Upload a new file.");
+                return "redirect:/home";
+            } else {
 
-        if (rowsAdded < 0) {
-            this.errorMessage = "There was an error adding your file. Please try again.";
+                // Set FILE values
+                file.setFileName(fileUpload.getOriginalFilename());
+                file.setContentType(fileUpload.getContentType());
+                file.setFileSize(String.valueOf(fileUpload.getSize()));
+                file.setUserId(userId);
+                file.setFileData(fileUpload.getBytes());
+
+                int rowsAdded = fileService.addFile(file);
+                //        model.addAttribute("ifSuccess", true);
+                //        model.addAttribute("successMessage", "File has been uploaded.");
+
+                if (rowsAdded < 0) {
+                    this.errorMessage = "There was an error adding your file. Please try again.";
+                }
+
+                if (this.ifError == null) {
+                    redirectAttributes.addFlashAttribute("ifSuccess", true);
+                    redirectAttributes.addFlashAttribute("successMessage", "File has been added.");
+                } else {
+                    redirectAttributes.addFlashAttribute("ifError", true);
+                    redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e);
         }
-
-        if (this.ifError == null) {
-            redirectAttributes.addFlashAttribute("ifSuccess", true);
-            redirectAttributes.addFlashAttribute("successMessage", "File has been added.");
-        } else {
-            redirectAttributes.addFlashAttribute("ifError", true);
-            redirectAttributes.addFlashAttribute("errorMessage", this.errorMessage);
-        }
-
         return "redirect:/home";
     }
 

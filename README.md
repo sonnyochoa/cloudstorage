@@ -126,4 +126,3 @@ You aren't required to understand hashing or encryption and that's why your tech
 [Hash Function](https://en.wikipedia.org/wiki/Hash_function)
 [Encryption](https://en.wikipedia.org/wiki/Encryption)
 
-All of us here at Super*Duper*Drive wish you good luck with the project!
